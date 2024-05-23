@@ -8,48 +8,29 @@ VJScript was created by Vijay Kiran Kethanaboyina, a Computer Science student at
 
 ## Prerequisites
 
-- **FontForge**: FontForge is required to run the font generation script. Follow the instructions below to install FontForge.
+- **Docker**: Docker is required to run the font generation script. Follow the instructions below to install Docker.
 
-### Installing FontForge
+### Installing Docker
 
 #### On macOS
 
-1. Install Homebrew if you don't have it already:
-    ```bash
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    ```
-
-2. Install FontForge using Homebrew:
-    ```bash
-    brew install fontforge
-    ```
+1. Install Docker Desktop from the [Docker website](https://www.docker.com/products/docker-desktop).
 
 #### On Linux
 
-1. Install FontForge using your package manager. For Debian-based distributions (like Ubuntu), use:
+1. Install Docker using your package manager. For Debian-based distributions (like Ubuntu), use:
     ```bash
-    sudo apt-get install fontforge
+    sudo apt-get install docker.io
     ```
 
 2. For Red Hat-based distributions (like Fedora), use:
     ```bash
-    sudo dnf install fontforge
+    sudo dnf install docker
     ```
 
 #### On Windows
 
-1. Download the FontForge installer from the [FontForge website](https://fontforge.org/en-US/downloads/windows/).
-
-2. Run the installer and follow the instructions to install FontForge.
-
-### Installing Python and FontForge-Python Bindings
-
-1. Ensure you have Python installed. You can download it from the [Python website](https://www.python.org/).
-
-2. Install the FontForge Python bindings:
-    ```bash
-    sudo apt-get install python3-fontforge
-    ```
+1. Install Docker Desktop from the [Docker website](https://www.docker.com/products/docker-desktop).
 
 ## Project Setup
 
@@ -63,9 +44,14 @@ VJScript was created by Vijay Kiran Kethanaboyina, a Computer Science student at
     - Download the DejaVu Sans font from [DejaVu Fonts](https://dejavu-fonts.github.io/).
     - Place the `DejaVuSans.ttf` file in the project directory.
 
-3. **Run the FontForge script**:
+3. **Build the Docker image**:
     ```bash
-    python create_vjscript_font.py
+    docker build -t vjscript-font .
+    ```
+
+4. **Run the Docker container**:
+    ```bash
+    docker run --rm -v $(pwd):/app vjscript-font
     ```
 
 ## Script Explanation
