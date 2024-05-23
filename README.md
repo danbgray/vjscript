@@ -54,6 +54,27 @@ VJScript was created by Vijay Kiran Kethanaboyina, a Computer Science student at
     docker run --rm -v $(pwd):/app vjscript-font
     ```
 
+    This command mounts the current directory to the `/app` directory in the container and runs the script to generate the font.
+
+## Running the Script within the Docker Container
+
+If you need to run the `create_vjscript_font.py` script within the Docker container interactively or with specific arguments, you can do so by following these steps:
+
+1. **Start a bash session in the Docker container**:
+    ```bash
+    docker run -it --rm -v $(pwd):/app vjscript-font /bin/bash
+    ```
+
+2. **Run the script inside the container**:
+    ```bash
+    python3 create_vjscript_font.py
+    ```
+
+3. **Exit the container**:
+    ```bash
+    exit
+    ```
+
 ## Script Explanation
 
 The provided script `create_vjscript_font.py` does the following:
@@ -90,4 +111,3 @@ After running the script, the generated font file `VJScript.otf` can be used in 
     <p>Type your text here to see it in VJScript.</p>
 </body>
 </html>
-
