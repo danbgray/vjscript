@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VJScript Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #container {
+            display: flex;
+            justify-content: space-between;
+        }
+        #inputText, #output {
+            width: 48%;
+        }
+        .consonant {
+            display: inline-block;
+            position: relative;
+            margin: 0 0.2em;
+        }
+        .vowel {
+            position: absolute;
+            top: -1em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+        }
+        .word {
+            margin-right: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>VJScript Translator</h1>
+    <div id="container">
+        <textarea id="inputText" rows="10" placeholder="Enter English text here"></textarea>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        document.getElementById('inputText').addEventListener('input', function() {
+            const inputText = this.value;
+            fetch('http://127.0.0.1:5000/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: inputText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerHTML = data.translated_text.split(' ').map(word => `<span class="word">${word}</span>`).join(' ');
+            });
+        });
+    </script>
+</body>
+</html>
