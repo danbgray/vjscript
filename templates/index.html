@@ -43,7 +43,8 @@
     <script>
         document.getElementById('inputText').addEventListener('input', function() {
             const inputText = this.value;
-            fetch('http://127.0.0.1:5000/translate', {
+            const url = `${window.location.origin}/translate`;
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
