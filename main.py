@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import nltk
@@ -90,7 +90,7 @@ def translate_text(text):
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('.', 'index.html')
+    return send_file('index.html')
 
 @app.route('/translate', methods=['POST'])
 def translate():
@@ -100,4 +100,4 @@ def translate():
     return jsonify({ 'translated_text': translated_text })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
