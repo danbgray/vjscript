@@ -14,14 +14,14 @@
             justify-content: space-between;
         }
         #inputText, #output {
-            width: 48%;
+            width: 45%;
         }
-        .consonant {
+        .up {
             display: inline-block;
             position: relative;
             margin: 0 0.2em;
         }
-        .vowel {
+        .down {
             position: absolute;
             top: -1em;
             left: 50%;
@@ -30,6 +30,9 @@
         }
         .word {
             margin-right: 0.5em;
+        }
+        .standalone {
+            display: inline-block;
         }
     </style>
 </head>
@@ -41,6 +44,29 @@
     </div>
 
     <script>
+        function decodePlaceholders(text) {
+            return text.replace(/\[c\]/g, '<span class="up">')
+                       .replace(/\[\/c\]/g, '</span>')
+                       .replace(/\[v\]/g, '<span class="down">')
+                       .replace(/\[\/v\]/g, '</span>');
+        }
+
+        function renderTranslatedText(translatedText) {
+            const decodedText = decodePlaceholders(translatedText);
+
+            const outputElement = document.getElementById('output');
+            outputElement.innerHTML = ''; // Clear previous content
+
+            // Create a temporary div to hold the decoded HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = decodedText;
+
+            // Append the content of the temporary div to the output element
+            while (tempDiv.firstChild) {
+                outputElement.appendChild(tempDiv.firstChild);
+            }
+        }
+
         document.getElementById('inputText').addEventListener('input', function() {
             const inputText = this.value;
             const url = `${window.location.origin}/translate`;
@@ -53,7 +79,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('output').innerHTML = data.translated_text.split(' ').map(word => `<span class="word">${word}</span>`).join(' ');
+                renderTranslatedText(data.translated_text);
             });
         });
     </script>
