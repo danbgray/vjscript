@@ -88,7 +88,7 @@ def translate_text(text):
 
 @app.route('/')
 def serve_index():
-    return send_file('index.html')
+    return send_file('templates/index.html')
 
 @app.route('/translate', methods=['POST'])
 def translate():
