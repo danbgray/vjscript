@@ -28,7 +28,12 @@ vowel_mapping = {
     'AY': 'AI',
     'AW': 'OW',
     'OY': 'OY',
-    'ER': 'ER'
+    'ER': 'ER',
+    'A': 'AE',
+    'E': 'E',
+    'I': 'I',
+    'O': 'O',
+    'U': 'U'
 }
 
 consonant_mapping = {
@@ -52,7 +57,11 @@ consonant_mapping = {
     'S': 'S',
     'Z': 'Z',
     'SH': 'SH',
-    'ZH': 'ZH'
+    'ZH': 'ZH',
+    'PH': 'F',  # Add common phonetic combinations
+    'C': 'K',
+    'X': 'KS',
+    'Q': 'KW'
 }
 
 
@@ -63,7 +72,29 @@ def get_phonetic_transcription(word):
         return cmu_dict[word][0]  # Return the first pronunciation variant
     else:
         # Fallback to character by character phonetic transcription
-        return list(word)
+        return fallback_phonetic_transcription(word)
+
+
+def fallback_phonetic_transcription(word):
+    """ Provide a basic phonetic transcription for words not in the dictionary """
+    phonetic_transcription = []
+    i = 0
+    while i < len(word):
+        if i < len(word) - 1 and word[i:i + 2] in consonant_mapping:
+            phonetic_transcription.append(consonant_mapping[word[i:i +
+                                                                 2].upper()])
+            i += 2
+        else:
+            char = word[i]
+            if char in 'aeiou':
+                phonetic_transcription.append(
+                    vowel_mapping.get(char.upper(), char))
+            else:
+                phonetic_transcription.append(
+                    consonant_mapping.get(char.upper(), char))
+            i += 1
+    return phonetic_transcription
+
 
 def map_phoneme(phoneme):
     """ Map ARPAbet phonemes to VJScript phonemes """
@@ -122,39 +153,6 @@ def translate_text(text):
     translated_words = [format_vjscript(word) for word in words]
     return ' '.join(translated_words)
 
-def parse_vjscript(vjscript):
-    """ Parse VJScript text into consonants and vowels from @vkethana to keep a compatable parser. """
-    pattern = re.compile(r"([A-Z]+)(?:\{([A-Z]+)\})?")
-    words = vjscript.split()
-    parsed_words = []
-
-    for word in words:
-        matches = pattern.findall(word)
-        if not matches:
-            raise ValueError("Invalid VJScript format")
-        parsed_data = []
-        for match in matches:
-            consonants, vowel = match
-            parsed_data.append((consonants, vowel))
-        parsed_words.append(parsed_data)
-
-    return parsed_words
-
-def generate_html(parsed_words):
-    """ Generate HTML from parsed VJScript words """
-    html_output = ''
-    for word in parsed_words:
-        html_output += '<span class="word">\n'
-        for consonants, vowel in word:
-            length = len(consonants)
-            for i, consonant in enumerate(consonants):
-                html_output += '    <div class="consonant-vowel">\n'
-                if i == length - 1 and vowel:
-                    html_output += f'        <span class="vowel">{vowel}</span>\n'
-                html_output += f'        <span class="consonant">{consonant}</span>\n'
-                html_output += '    </div>\n'
-        html_output += '</span>\n'
-    return html_output
 
 @app.route('/')
 def serve_index():
@@ -166,9 +164,8 @@ def translate():
     data = request.get_json()
     text = data.get('text', '')
     translated_text = translate_text(text)
-    parsed_words = parse_vjscript(translated_text)
-    html_output = generate_html(parsed_words)
-    return jsonify({'translated_text': html_output})
+    return jsonify({'translated_text': translated_text})
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

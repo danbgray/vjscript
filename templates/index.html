@@ -34,9 +34,6 @@
         .word {
             margin-right: 0.5em;
         }
-        .standalone {
-            display: inline-block;
-        }
     </style>
 </head>
 <body>
@@ -47,9 +44,48 @@
     </div>
 
     <script>
-        function renderTranslatedText(translatedText) {
+        function renderVJScript(text) {
+            const words = text.split(' ');
             const outputElement = document.getElementById('output');
-            outputElement.innerHTML = translatedText; // Directly set the inner HTML
+            outputElement.innerHTML = ''; // Clear previous content
+
+            words.forEach(word => {
+                const wordElement = document.createElement('span');
+                wordElement.className = 'word';
+
+                const pattern = /([A-Z]+)(?:\{([A-Z]+)\})?/g;
+                let match;
+                while ((match = pattern.exec(word)) !== null) {
+                    const consonants = match[1];
+                    const vowel = match[2];
+
+                    for (let i = 0; i < consonants.length; i++) {
+                        const consonantElement = document.createElement('div');
+                        consonantElement.className = 'consonant-vowel';
+
+                        const consonantSpan = document.createElement('span');
+                        consonantSpan.className = 'consonant';
+                        consonantSpan.textContent = consonants[i];
+                        consonantElement.appendChild(consonantSpan);
+
+                        if (i === consonants.length - 1 && vowel) {
+                            const vowelSpan = document.createElement('span');
+                            vowelSpan.className = 'vowel';
+                            vowelSpan.textContent = vowel;
+                            consonantElement.appendChild(vowelSpan);
+                        }
+
+                        wordElement.appendChild(consonantElement);
+                    }
+                }
+
+                if (wordElement.childNodes.length === 0) {
+                    // If no valid matches were found, add the original word
+                    wordElement.textContent = word;
+                }
+
+                outputElement.appendChild(wordElement);
+            });
         }
 
         document.getElementById('inputText').addEventListener('input', function() {
@@ -64,7 +100,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                renderTranslatedText(data.translated_text);
+                renderVJScript(data.translated_text);
             });
         });
     </script>
