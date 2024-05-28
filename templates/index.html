@@ -14,12 +14,15 @@
             justify-content: space-between;
         }
         #inputText, #output {
-            width: 48%;
+            width: 45%;
         }
-        .consonant {
+        .consonant-vowel {
             display: inline-block;
             position: relative;
             margin: 0 0.2em;
+        }
+        .consonant {
+            display: inline-block;
         }
         .vowel {
             position: absolute;
@@ -41,6 +44,11 @@
     </div>
 
     <script>
+        function renderTranslatedText(translatedText) {
+            const outputElement = document.getElementById('output');
+            outputElement.innerHTML = translatedText; // Directly set the inner HTML
+        }
+
         document.getElementById('inputText').addEventListener('input', function() {
             const inputText = this.value;
             const url = `${window.location.origin}/translate`;
@@ -53,7 +61,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('output').innerHTML = data.translated_text.split(' ').map(word => `<span class="word">${word}</span>`).join(' ');
+                renderTranslatedText(data.translated_text);
             });
         });
     </script>
