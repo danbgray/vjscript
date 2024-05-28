@@ -55,6 +55,7 @@ consonant_mapping = {
     'ZH': 'ZH'
 }
 
+
 def get_phonetic_transcription(word):
     """ Get the ARPAbet phonetic transcription of a word. """
     word = word.lower()
@@ -72,6 +73,7 @@ def map_phoneme(phoneme):
     if phoneme in consonant_mapping:
         return consonant_mapping[phoneme]
     return phoneme
+
 
 def format_vjscript(word):
     """ Format the word into VJScript style """
@@ -104,6 +106,7 @@ def format_vjscript(word):
 
     return result
 
+
 def wrap_consonant(consonant, vowel):
     """ Wrap consonant and vowel in VJScript style """
     if vowel:
@@ -111,6 +114,7 @@ def wrap_consonant(consonant, vowel):
     else:
         wrapped = f'{consonant}'
     return wrapped
+
 
 def translate_text(text):
     """ Translate a text to VJScript style """
@@ -155,6 +159,7 @@ def generate_html(parsed_words):
 @app.route('/')
 def serve_index():
     return send_file('templates/index.html')
+
 
 @app.route('/translate', methods=['POST'])
 def translate():
