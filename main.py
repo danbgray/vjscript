@@ -119,7 +119,7 @@ def translate_text(text):
     return ' '.join(translated_words)
 
 def parse_vjscript(vjscript):
-    """ Parse VJScript text into consonants and vowels """
+    """ Parse VJScript text into consonants and vowels from @vkethana to keep a compatable parser. """
     pattern = re.compile(r"([A-Z]+)(?:\{([A-Z]+)\})?")
     words = vjscript.split()
     parsed_words = []
